@@ -1,84 +1,86 @@
 import { motion } from 'framer-motion';
-import { Sparkles, MapPin, ShieldCheck, Star } from 'lucide-react';
+import { Sparkles, ShieldCheck, Clock, Compass } from 'lucide-react';
 
 export default function HeroSection() {
     return (
-        <div className="relative overflow-hidden rounded-3xl mb-10 h-[520px] flex items-center shadow-2xl">
-            {/* Background */}
+        <div className="relative overflow-hidden rounded-3xl mb-10 min-h-[460px] md:min-h-[520px] flex flex-col justify-between p-6 sm:p-10 md:p-14 shadow-2xl">
+            {/* Background Image */}
             <div
                 className="absolute inset-0 bg-cover bg-center scale-105 transition-transform duration-[8s] hover:scale-110"
                 style={{ backgroundImage: 'url("/hero-bg.png")' }}
             />
-            {/* Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/97 via-slate-900/70 to-slate-900/25" />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent" />
+            {/* Dark Premium Gradients */}
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-900/80 to-slate-900/30" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent" />
 
-            {/* Glow effects */}
-            <div className="absolute right-[10%] bottom-[15%] w-80 h-80 bg-primary-500/20 rounded-full blur-[100px] pointer-events-none" />
-            <div className="absolute top-[10%] right-[30%] w-40 h-40 bg-accent-500/10 rounded-full blur-[80px] pointer-events-none" />
+            {/* Ambient Glows */}
+            <div className="absolute right-[10%] bottom-[15%] w-72 h-72 bg-primary-600/20 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute top-[10%] right-[25%] w-48 h-48 bg-accent-500/10 rounded-full blur-[90px] pointer-events-none" />
 
-            {/* Content */}
-            <div className="relative z-10 px-8 md:px-14 max-w-2xl">
+            {/* Main Content Area */}
+            <div className="relative z-10 max-w-2xl my-auto pb-8 md:pb-0">
                 <motion.div
-                    initial={{ opacity: 0, y: 24 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: 'easeOut' }}>
-
-                    <div className="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-xs font-semibold tracking-wide">
-                        <Sparkles size={13} className="text-primary-400" />
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
+                >
+                    {/* Badge */}
+                    <div className="inline-flex items-center gap-2 mb-4 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-xs font-semibold tracking-wide">
+                        <Sparkles size={12} className="text-primary-400 animate-pulse" />
                         Yeni Nesil Konaklama Deneyimi
                     </div>
 
-                    <h1 className="font-heading text-4xl md:text-6xl font-extrabold mb-5 leading-[1.1] text-white">
+                    {/* Headline */}
+                    <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-[1.15] text-white tracking-tight">
                         Hayalindeki{' '}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-300 to-accent-400">
                             Konforu
                         </span>{' '}
                         Keşfet
                     </h1>
 
-                    <p className="text-base md:text-lg text-white/75 mb-6 max-w-lg leading-relaxed font-body">
-                        Türkiye'nin dört bir yanında <span className="text-white font-semibold">5.000'den fazla</span> seçkin konaklamayı keşfedin.
-                        DwellGo ile güvenli ödeme, anlık onay ve <span className="text-white font-semibold">gerçek misafir yorumları</span> sayesinde
-                        mükemmel tatil deneyiminizi planlayın.
+                    {/* Paragraph description */}
+                    <p className="text-sm sm:text-base md:text-lg text-white/80 mb-6 max-w-lg leading-relaxed font-body">
+                        Türkiye'nin dört bir yanında <span className="text-white font-semibold">5.000'den fazla</span> seçkin konaklamayı keşfedin. 
+                        DwellGo ile güvenli ödeme, anlık onay ve <span className="text-white font-semibold">gerçek misafir yorumları</span> ile 
+                        kusursuz bir konaklama deneyimi yaşayın.
                     </p>
 
-                    {/* Feature highlights */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="flex flex-wrap gap-3">
+                    {/* Unique Value Propositions (No duplicates with stats) */}
+                    <div className="flex flex-wrap gap-2.5">
                         {[
                             { icon: ShieldCheck, text: 'Güvenli & Onaylı İlanlar', color: '#10b981' },
-                            { icon: MapPin,       text: '81 Şehirde Konaklama',   color: '#3b82f6' },
-                            { icon: Star,         text: '4.9★ Ortalama Puan',     color: '#f59e0b' },
+                            { icon: Clock,       text: 'Anında Rezervasyon Onayı', color: '#3b82f6' },
+                            { icon: Compass,     text: 'Kişiselleştirilmiş Arama', color: '#f59e0b' },
                         ].map(({ icon: Icon, text, color }) => (
-                            <div key={text}
-                                className="flex items-center gap-2 px-4 py-2 rounded-xl backdrop-blur-sm border border-white/10 text-white/85 text-sm font-medium"
-                                style={{ background: `${color}15` }}>
+                            <div
+                                key={text}
+                                className="flex items-center gap-2 px-3 py-1.5 rounded-xl backdrop-blur-sm border border-white/10 text-white/90 text-xs sm:text-sm font-medium transition-all duration-300 hover:border-white/25"
+                                style={{ background: `${color}15` }}
+                            >
                                 <Icon size={14} style={{ color }} />
                                 {text}
                             </div>
                         ))}
-                    </motion.div>
+                    </div>
                 </motion.div>
             </div>
 
-            {/* Stats strip */}
+            {/* Bottom Stats Section (Ensured no overlaps, stacked nicely on mobile) */}
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="absolute bottom-0 left-0 right-0 px-8 md:px-14 pb-6 flex gap-8">
+                className="relative z-10 pt-4 border-t border-white/10 flex flex-row flex-wrap gap-x-10 gap-y-3 mt-4 md:mt-0"
+            >
                 {[
-                    { value: '5,000+', label: 'İlan' },
-                    { value: '81', label: 'Şehir' },
-                    { value: '4.9★', label: 'Ortalama Puan' },
+                    { value: '5,000+', label: 'Seçkin İlan' },
+                    { value: '81',     label: 'Şehir' },
+                    { value: '4.9★',   label: 'Müşteri Puanı' },
                 ].map(({ value, label }) => (
-                    <div key={label} className="text-white/80">
-                        <p className="font-heading font-bold text-lg text-white">{value}</p>
-                        <p className="text-xs text-white/60">{label}</p>
+                    <div key={label} className="flex flex-col">
+                        <span className="font-heading font-bold text-lg sm:text-xl text-white tracking-tight">{value}</span>
+                        <span className="text-[10px] sm:text-xs text-white/60 font-medium uppercase tracking-wider">{label}</span>
                     </div>
                 ))}
             </motion.div>

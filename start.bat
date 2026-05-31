@@ -86,18 +86,12 @@ echo    [*] Frontend App :  http://localhost:5173
 echo    [*] Database View:  http://localhost:5555
 echo  ================================================================
 echo.
-echo  Opening browser in 8 seconds...
-timeout /t 8 /nobreak >nul
-
-:: Open all in browser
-start http://localhost:5173
-timeout /t 1 /nobreak >nul
-start http://localhost:5555
-
-echo.
 echo  ================================================================
 echo    DwellGo is running!
+echo    - Frontend App: http://localhost:5173
+echo    - Database Viewer: http://localhost:5555
 echo    To STOP the project, run: stop.bat
 echo  ================================================================
 echo.
+
 pause >nul

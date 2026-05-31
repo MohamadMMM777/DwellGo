@@ -111,14 +111,14 @@ const getPlaceById = async (req, res) => {
                 }
             }
         });
-        if (!place) return res.status(404).json({ error: 'Place not found' });
+        if (!place) return res.status(404).json({ error: 'İlan bulunamadı.' });
 
         // Allow owner or admin to see their own non-published places
         if (place.status !== 'PUBLISHED') {
             const isOwnerOrAdmin =
                 req.user && (req.user.id === place.ownerId || req.user.role === 'ADMIN');
             if (!isOwnerOrAdmin) {
-                return res.status(404).json({ error: 'Place not found' });
+                return res.status(404).json({ error: 'İlan bulunamadı.' });
             }
         }
 
@@ -129,7 +129,7 @@ const getPlaceById = async (req, res) => {
         res.json(mapped);
     } catch (err) {
         console.error('getPlaceById error:', err);
-        res.status(500).json({ error: 'Failed to get place' });
+        res.status(500).json({ error: 'İlan bilgileri alınamadı. Lütfen tekrar deneyin.' });
     }
 };
 
@@ -141,7 +141,7 @@ const createPlace = async (req, res) => {
 
         // Admin is NEVER allowed to create a listing
         if (userDoc.role === 'ADMIN') {
-            return res.status(403).json({ error: 'Admins cannot create listings' });
+            return res.status(403).json({ error: 'Yöneticiler ilan oluşturamaz.' });
         }
 
         const {
@@ -153,16 +153,16 @@ const createPlace = async (req, res) => {
 
         // Basic validation
         if (!title || title.trim().length < 3) {
-            return res.status(400).json({ error: 'Title must be at least 3 characters' });
+            return res.status(400).json({ error: 'İlan başlığı en az 3 karakter olmalıdır.' });
         }
         if (!city || city.trim().length === 0) {
-            return res.status(400).json({ error: 'City is required' });
+            return res.status(400).json({ error: 'Şehir alanı zorunludur.' });
         }
         if (!price || Number(price) <= 0) {
-            return res.status(400).json({ error: 'Price must be greater than 0' });
+            return res.status(400).json({ error: 'Gecelik fiyat 0\'dan büyük olmalıdır.' });
         }
         if (!addedPhotos || addedPhotos.length === 0) {
-            return res.status(400).json({ error: 'At least one photo is required' });
+            return res.status(400).json({ error: 'En az bir fotoğraf eklemeniz zorunludur.' });
         }
 
         const photosData = addedPhotos.map((url, idx) => ({ url, isMain: idx === 0 }));
@@ -231,7 +231,7 @@ const createPlace = async (req, res) => {
         res.status(201).json(mapPlaceData(placeDoc));
     } catch (err) {
         console.error('createPlace error:', err);
-        res.status(500).json({ error: 'Failed to create listing. Please try again.' });
+        res.status(500).json({ error: 'İlan oluşturulamadı. Lütfen tekrar deneyin.' });
     }
 };
 

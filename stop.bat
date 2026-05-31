@@ -29,17 +29,17 @@ echo.
 echo  Killing any remaining Node.js processes on ports 4000, 5173, 5555...
 
 :: Kill port 4000 (Backend)
-for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":4000 " 2^>nul') do (
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr /R /C:":4000 .*LISTENING" 2^>nul') do (
     taskkill /PID %%a /F >nul 2>&1
 )
 
 :: Kill port 5173 (Frontend / Vite)
-for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":5173 " 2^>nul') do (
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr /R /C:":5173 .*LISTENING" 2^>nul') do (
     taskkill /PID %%a /F >nul 2>&1
 )
 
 :: Kill port 5555 (Prisma Studio)
-for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":5555 " 2^>nul') do (
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr /R /C:":5555 .*LISTENING" 2^>nul') do (
     taskkill /PID %%a /F >nul 2>&1
 )
 
