@@ -1,0 +1,354 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum PlaceStatus {
+  DRAFT
+  PUBLISHED
+  UNLISTED
+}
+
+enum BookingStatus {
+  PENDING    // Awaiting host approval
+  APPROVED   // Host approved, awaiting payment
+  CONFIRMED  // Payment received — booking confirmed
+  CANCELLED  // Rejected by host or cancelled by guest
+  COMPLETED  // Stay finished
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  REFUNDED
+}
+
+enum NotificationType {
+  BOOKING_NEW
+  BOOKING_APPROVED
+  BOOKING_REJECTED
+  BOOKING_CONFIRMED
+  BOOKING_CANCELLED
+  BOOKING_COMPLETED
+  MESSAGE_NEW
+  REVIEW_NEW
+  SYSTEM
+}
+
+enum ReportTarget {
+  USER
+  PLACE
+  BOOKING
+  MESSAGE
+  REVIEW
+}
+
+enum ReportStatus {
+  OPEN
+  IN_REVIEW
+  RESOLVED
+  DISMISSED
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  shortId   Int?     @unique @map("kisa_id")
+  email     String   @unique @map("e_posta")
+  password  String?  @map("sifre")
+  role      Role     @default(USER) @map("rol")
+
+  // Host mode — true when user activates hosting (adds first place)
+  isHost    Boolean  @default(false) @map("ev_sahibi_mi")
+  hostSince DateTime? @map("ev_sahibi_olma_tarihi")
+
+  // Admin can ban regular users
+  isBanned  Boolean  @default(false) @map("yasakli_mi")
+
+  isVerified Boolean  @default(false) @map("dogrulanmis_mi")
+  createdAt  DateTime @default(now()) @map("olusturulma_tarihi")
+  updatedAt  DateTime @updatedAt @map("guncellenme_tarihi")
+
+  profile                    Profile?
+  places                     Place[]
+  bookings                   Booking[]
+  reviews                    Review[]
+  wishlists                  Wishlist[]
+  conversationsAsParticipant ConversationParticipant[]
+  messagesSent               Message[]
+  notifications              Notification[]
+  reports                    Report[]       @relation("ReporterRelation")
+
+  @@map("Kullanici")
+}
+
+model Profile {
+  id               String  @id @default(cuid())
+  userId           String  @unique @map("kullanici_id")
+  user             User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name             String? @map("ad_soyad")
+  phone            String? @map("telefon")
+  bio              String? @map("biyografi")
+  avatarUrl        String? @map("profil_resmi_url")
+  languages        String? @map("diller")
+  emergencyContact String? @map("acil_durum_iletisimi")
+
+  @@map("Profil")
+}
+
+model Place {
+  id           String      @id @default(cuid())
+  shortId      Int?        @unique @map("kisa_id")
+  ownerId      String      @map("sahip_id")
+  owner        User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  title        String?     @map("baslik")
+  description  String?     @map("aciklama")
+  propertyType String      @default("apartment") @map("mulk_tipi")
+  status       PlaceStatus @default(PUBLISHED) @map("durum")
+  extraInfo    String?     @map("ek_bilgi")
+  checkIn      Int?        @map("giris_saati")
+  checkOut     Int?        @map("cikis_saati")
+  createdAt    DateTime    @default(now()) @map("olusturulma_tarihi")
+  updatedAt    DateTime    @updatedAt @map("guncellenme_tarihi")
+
+  location     Location?
+  pricing      Pricing?
+  capacity     Capacity?
+  photos       PlacePhoto[]
+  amenities    PlaceAmenity[]
+  bookings     Booking[]
+  reviews      Review[]
+  wishlistedBy Wishlist[]
+
+  @@map("Mekan")
+}
+
+model Location {
+  id           String  @id @default(cuid())
+  placeId      String  @unique @map("mekan_id")
+  place        Place   @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  city         String? @map("sehir")
+  district     String? @map("ilce")
+  neighborhood String? @map("mahalle")
+  street       String? @map("sokak")
+  address      String? @map("adres")
+  latitude     Float?  @map("enlem")
+  longitude    Float?  @map("boylam")
+
+  @@map("Konum")
+}
+
+model Pricing {
+  id              String @id @default(cuid())
+  placeId         String @unique @map("mekan_id")
+  place           Place  @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  basePrice       Float? @map("taban_fiyat")
+  cleaningFee     Float? @default(0) @map("temizlik_ucreti")
+  serviceFee      Float? @default(0) @map("hizmet_ucreti")
+  securityDeposit Float? @default(0) @map("depozito")
+
+  @@map("Fiyatlandirma")
+}
+
+model Capacity {
+  id        String @id @default(cuid())
+  placeId   String @unique @map("mekan_id")
+  place     Place  @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  maxGuests Int?   @default(1) @map("maksimum_konuk")
+  bedrooms  Int?   @default(1) @map("yatak_odalari")
+  beds      Int?   @default(1) @map("yataklar")
+  bathrooms Int?   @default(1) @map("banyolar")
+
+  @@map("Kapasite")
+}
+
+model PlacePhoto {
+  id      String  @id @default(cuid())
+  placeId String  @map("mekan_id")
+  place   Place   @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  url     String  @map("resim_url")
+  isMain  Boolean @default(false) @map("ana_resim_mi")
+
+  @@map("MekanFotografi")
+}
+
+model Amenity {
+  id     String         @id @default(cuid())
+  name   String         @unique @map("ad")
+  icon   String?        @map("ikon")
+  places PlaceAmenity[]
+
+  @@map("Olanak")
+}
+
+model PlaceAmenity {
+  placeId   String  @map("mekan_id")
+  place     Place   @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  amenityId String  @map("olanak_id")
+  amenity   Amenity @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  @@id([placeId, amenityId])
+  @@map("MekanOlanagi")
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  shortId       Int?          @unique @map("kisa_id")
+  placeId       String        @map("mekan_id")
+  place         Place         @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  userId        String        @map("kullanici_id")
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  checkIn       DateTime      @map("giris_tarihi")
+  checkOut      DateTime      @map("cikis_tarihi")
+  name          String        @map("ad_soyad")
+  phone         String        @map("telefon")
+  guestsCount   Int           @default(1) @map("konuk_sayisi")
+  totalPrice    Float?        @map("toplam_fiyat")
+  status        BookingStatus @default(PENDING) @map("durum")
+  paymentStatus PaymentStatus @default(UNPAID) @map("odeme_durumu")
+  transactionId String?       @map("islem_id")
+
+  // Workflow timestamps
+  approvedAt  DateTime? @map("onaylanma_tarihi")
+  rejectedAt  DateTime? @map("reddedilme_tarihi")
+  paidAt      DateTime? @map("odeme_tarihi")
+  cancelledAt DateTime? @map("iptal_tarihi")
+  cancelReason String?  @map("iptal_nedeni")
+
+  createdAt DateTime @default(now()) @map("olusturulma_tarihi")
+  updatedAt DateTime @updatedAt @map("guncellenme_tarihi")
+
+  review    Review?
+
+  @@index([placeId, checkIn, checkOut])
+  @@map("Rezervasyon")
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String   @map("kullanici_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  placeId   String   @map("mekan_id")
+  place     Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("olusturulma_tarihi")
+
+  @@unique([userId, placeId])
+  @@map("Favoriler")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String   @map("kullanici_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  placeId   String   @map("mekan_id")
+  place     Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  // Link to completed booking that unlocked this review
+  bookingId String?  @unique @map("rezervasyon_id")
+  booking   Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+
+  rating        Int? @map("puan")
+  cleanliness   Int? @default(5) @map("temizlik")
+  communication Int? @default(5) @map("iletisim")
+  locationScore Int? @default(5) @map("konum")
+  valueScore    Int? @default(5) @map("deger")
+  comment       String? @map("yorum")
+
+  // Host reply
+  hostReply   String? @map("ev_sahibi_yaniti")
+  hostReplyAt DateTime? @map("ev_sahibi_yanit_tarihi")
+
+  createdAt DateTime @default(now()) @map("olusturulma_tarihi")
+  updatedAt DateTime @updatedAt @map("guncellenme_tarihi")
+
+  @@unique([userId, placeId])
+  @@map("Degerlendirme")
+}
+
+model Conversation {
+  id           String                    @id @default(cuid())
+  createdAt    DateTime                  @default(now()) @map("olusturulma_tarihi")
+  updatedAt    DateTime                  @updatedAt @map("guncellenme_tarihi")
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@map("Sohbet")
+}
+
+model ConversationParticipant {
+  id             String       @id @default(cuid())
+  userId         String       @map("kullanici_id")
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversationId String       @map("sohbet_id")
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, conversationId])
+  @@map("SohbetKatilimcisi")
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String       @map("sohbet_id")
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String       @map("gonderici_id")
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  text           String       @map("icerik")
+  read           Boolean      @default(false) @map("okundu_mu")
+  readAt         DateTime?    @map("okunma_tarihi")
+  createdAt      DateTime     @default(now()) @map("olusturulma_tarihi")
+  updatedAt      DateTime     @updatedAt @map("guncellenme_tarihi")
+
+  @@map("Mesaj")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String           @map("kullanici_id")
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String?          @map("baslik")
+  message   String           @map("mesaj")
+  type      NotificationType @default(SYSTEM) @map("tip")
+  relatedId String?          @map("ilgili_id")
+  isRead    Boolean          @default(false) @map("okundu_mu")
+  createdAt DateTime         @default(now()) @map("olusturulma_tarihi")
+
+  @@map("Bildirim")
+}
+
+// ─── Dispute / Report System ─────────────────────────────────────────────────
+
+// ─── Auto-increment counters (SQLite workaround) ─────────────────────────────
+model Counter {
+  name  String @id @map("ad")  // "user" | "place" | "booking"
+  value Int    @default(0) @map("deger")
+
+  @@map("Sayac")
+}
+
+model Report {
+  id          String       @id @default(cuid())
+  reporterId  String       @map("rapor_eden_id")
+  reporter    User         @relation("ReporterRelation", fields: [reporterId], references: [id], onDelete: Cascade)
+  targetType  ReportTarget @map("hedef_tipi")
+  targetId    String       @map("hedef_id")
+  reason      String       @map("neden")
+  description String?      @map("aciklama")
+  status      ReportStatus @default(OPEN) @map("durum")
+  adminNotes  String?      @map("yonetici_notlari")
+  resolvedAt  DateTime?    @map("cozulme_tarihi")
+  createdAt   DateTime     @map("olusturulma_tarihi")
+
+  @@map("Rapor")
+}

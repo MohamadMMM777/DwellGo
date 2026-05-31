@@ -1,0 +1,113 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: 'class',
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        heading: ['Manrope', 'Inter', 'sans-serif'],
+        body:    ['Inter', 'system-ui', 'sans-serif'],
+      },
+      colors: {
+        primary: {
+          DEFAULT: 'var(--primary-600)',
+          50:  'var(--primary-50)',
+          100: 'var(--primary-100)',
+          200: 'var(--primary-200)',
+          300: 'var(--primary-300)',
+          400: 'var(--primary-400)',
+          500: 'var(--primary-500)',
+          600: 'var(--primary-600)',
+          700: 'var(--primary-700)',
+          800: 'var(--primary-800)',
+          900: 'var(--primary-900)',
+          950: 'var(--primary-950)',
+        },
+        accent: {
+          DEFAULT: 'var(--accent-500)',
+          50:  'var(--accent-50)',
+          100: 'var(--accent-100)',
+          500: 'var(--accent-500)',
+          600: 'var(--accent-600)',
+        },
+        warm: {
+          DEFAULT: 'var(--warm-500)',
+          500: 'var(--warm-500)',
+          600: 'var(--warm-600)',
+        },
+        success: {
+          DEFAULT: 'var(--success-500)',
+          50:  'var(--success-50)',
+          100: 'var(--success-100)',
+          500: 'var(--success-500)',
+          600: 'var(--success-600)',
+        },
+        error: {
+          DEFAULT: 'var(--error-500)',
+          50:  'var(--error-50)',
+          100: 'var(--error-100)',
+          500: 'var(--error-500)',
+          600: 'var(--error-600)',
+        },
+        warning: {
+          DEFAULT: 'var(--warning-500)',
+          50:  'var(--warning-50)',
+          100: 'var(--warning-100)',
+          500: 'var(--warning-500)',
+          600: 'var(--warning-600)',
+        },
+        star: 'var(--star-color)',
+        surface: {
+          DEFAULT: 'var(--surface)',
+          2: 'var(--surface-2)',
+        },
+        bg:     'var(--background)',
+        border: 'var(--border)',
+        muted:  'var(--on-surface-2)',
+        // Keep slate/gray for backward compat
+        gray: {
+          50:  '#f8fafc',
+          100: '#f1f5f9',
+          200: '#e2e8f0',
+          300: '#cbd5e1',
+          400: '#94a3b8',
+          500: '#64748b',
+          600: '#475569',
+          700: '#334155',
+          800: '#1e293b',
+          900: '#0f172a',
+          950: '#020617',
+        },
+      },
+      borderRadius: {
+        '2xl': '1rem',
+        '3xl': '1.5rem',
+        '4xl': '2rem',
+      },
+      boxShadow: {
+        'card':   '0 4px 24px rgba(37, 99, 235, 0.07)',
+        'card-hover': '0 20px 60px rgba(37, 99, 235, 0.12)',
+        'primary': '0 4px 14px rgba(37, 99, 235, 0.3)',
+        'primary-lg': '0 8px 30px rgba(37, 99, 235, 0.4)',
+      },
+      animation: {
+        fadeIn:     'fadeIn 0.4s ease forwards',
+        slideUp:    'slideUp 0.4s ease forwards',
+        slideDown:  'slideDown 0.3s ease forwards',
+        scaleIn:    'scaleIn 0.3s ease forwards',
+        shimmer:    'shimmer 1.5s infinite',
+      },
+      keyframes: {
+        fadeIn:    { from: { opacity: 0, transform: 'translateY(8px)' }, to: { opacity: 1, transform: 'translateY(0)' } },
+        slideUp:   { from: { opacity: 0, transform: 'translateY(20px)' }, to: { opacity: 1, transform: 'translateY(0)' } },
+        slideDown: { from: { opacity: 0, transform: 'translateY(-10px)' }, to: { opacity: 1, transform: 'translateY(0)' } },
+        scaleIn:   { from: { opacity: 0, transform: 'scale(0.95)' }, to: { opacity: 1, transform: 'scale(1)' } },
+        shimmer:   { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
+      },
+    },
+  },
+  plugins: [],
+}
