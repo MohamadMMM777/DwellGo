@@ -1,10 +1,9 @@
-import { Wifi, Car, Tv, Radio, PawPrint, Waves, Palmtree, DoorOpen } from 'lucide-react';
+import { Wifi, Car, Tv, PawPrint, Waves, Palmtree, DoorOpen } from 'lucide-react';
 
 const PERKS = [
     { name: 'wifi',     label: 'Wifi',                 Icon: Wifi },
     { name: 'parking',  label: 'Ücretsiz Otopark',      Icon: Car },
     { name: 'tv',       label: 'Televizyon',            Icon: Tv },
-    { name: 'radio',    label: 'Radyo',                 Icon: Radio },
     { name: 'pets',     label: 'Evcil Hayvan Kabul',    Icon: PawPrint },
     { name: 'pool',     label: 'Yüzme Havuzu',          Icon: Waves },
     { name: 'beach',    label: 'Sahil / Deniz',         Icon: Palmtree },

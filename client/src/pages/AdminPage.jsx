@@ -350,7 +350,6 @@ export default function AdminPage() {
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <span className="font-mono text-xs px-2 py-1 rounded" style={{ background: 'rgba(99,102,241,0.15)', color: '#818cf8' }}>#{u.shortId}</span>
                                             <button onClick={() => deleteUser(u._id || u.id)}
                                                 className="opacity-0 group-hover:opacity-100 flex items-center gap-1 px-2 py-1 rounded text-xs transition-all"
                                                 style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444' }}>
@@ -367,7 +366,6 @@ export default function AdminPage() {
                                             <p className="text-xs" style={{ color: '#64748b' }}>{p.city} · {p.ownerName} · {p.bookingsCount} rezervasyon</p>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <span className="font-mono text-xs px-2 py-1 rounded" style={{ background: 'rgba(99,102,241,0.15)', color: '#818cf8' }}>#{p.shortId}</span>
                                             <button onClick={() => viewPlaceBookings(p.id)}
                                                 className="flex items-center gap-1 px-2 py-1 rounded text-xs"
                                                 style={{ background: 'rgba(59,130,246,0.1)', color: '#60a5fa' }}>
@@ -391,7 +389,6 @@ export default function AdminPage() {
                                                 <p className="text-xs" style={{ color: '#64748b' }}>{b.placeTitle}</p>
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className="font-mono text-xs px-2 py-1 rounded" style={{ background: 'rgba(99,102,241,0.15)', color: '#818cf8' }}>#{b.shortId}</span>
                                                 <span className="text-xs px-2 py-1 rounded font-semibold" style={{ background: sc.bg, color: sc.color }}>{sc.label}</span>
                                             </div>
                                         </div>
@@ -491,7 +488,7 @@ export default function AdminPage() {
                                     <table className="w-full text-sm">
                                         <thead>
                                             <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                                {['#', 'Kullanıcı', 'Tipi', 'E-posta', 'İlanlar', 'Rezervasyon', 'İşlem'].map(h => (
+                                                {['Kullanıcı', 'Tipi', 'E-posta', 'İlanlar', 'Rezervasyon', 'İşlem'].map(h => (
                                                     <th key={h} className="text-left px-6 py-3 text-xs font-semibold uppercase tracking-wider" style={{ color: '#475569' }}>{h}</th>
                                                 ))}
                                             </tr>
@@ -502,11 +499,6 @@ export default function AdminPage() {
                                                 const userBookings = bookings.filter(b => b.user?._id === u._id || b.user?.id === u._id);
                                                 return (
                                                     <tr key={u._id} className="group border-b" style={{ borderColor: 'rgba(255,255,255,0.03)' }}>
-                                                        <td className="px-6 py-4">
-                                                            <span className="font-mono text-xs px-2 py-1 rounded" style={{ background: 'rgba(99,102,241,0.15)', color: '#818cf8' }}>
-                                                                #{u.shortId ?? '—'}
-                                                            </span>
-                                                        </td>
                                                         <td className="px-6 py-4">
                                                             <div className="flex items-center gap-3">
                                                                 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center font-bold text-white text-sm">
@@ -556,7 +548,7 @@ export default function AdminPage() {
                                     <table className="w-full text-sm">
                                         <thead>
                                             <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                                {['#', 'İlan', 'Ev Sahibi', 'Fiyat', 'Rezervasyonlar', 'İşlem'].map(h => (
+                                                {['İlan', 'Ev Sahibi', 'Fiyat', 'Rezervasyonlar', 'İşlem'].map(h => (
                                                     <th key={h} className="text-left px-6 py-3 text-xs font-semibold uppercase tracking-wider" style={{ color: '#475569' }}>{h}</th>
                                                 ))}
                                             </tr>
@@ -567,26 +559,12 @@ export default function AdminPage() {
                                                 return (
                                                     <tr key={p._id || p.id} className="group border-b" style={{ borderColor: 'rgba(255,255,255,0.03)' }}>
                                                         <td className="px-4 py-4">
-                                                            <span className="font-mono text-xs px-2 py-1 rounded" style={{ background: 'rgba(99,102,241,0.15)', color: '#818cf8' }}>
-                                                                #{p.shortId ?? '—'}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-4 py-4">
-                                                            <div className="flex items-center gap-3">
-                                                                {p.photos?.[0] ? (
-                                                                    <img src={p.photos[0]} alt="" className="w-12 h-10 rounded-lg object-cover flex-shrink-0" />
-                                                                ) : (
-                                                                    <div className="w-12 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(255,255,255,0.05)' }}>
-                                                                        <Home size={14} style={{ color: '#475569' }} />
-                                                                    </div>
-                                                                )}
-                                                                <div className="min-w-0">
-                                                                    <Link to={`/place/${p._id || p.id}`} target="_blank"
-                                                                        className="font-medium text-white hover:text-primary-400 transition-colors truncate block max-w-[160px]">
-                                                                        {p.title}
-                                                                    </Link>
-                                                                    <p className="text-xs" style={{ color: '#64748b' }}>{p.propertyType}</p>
-                                                                </div>
+                                                            <div className="min-w-0">
+                                                                <Link to={`/place/${p._id || p.id}`} target="_blank"
+                                                                    className="font-medium text-white hover:text-primary-400 transition-colors truncate block max-w-[160px]">
+                                                                    {p.title}
+                                                                </Link>
+                                                                <p className="text-xs" style={{ color: '#64748b' }}>{p.propertyType}</p>
                                                             </div>
                                                         </td>
                                                         <td className="px-4 py-4">
@@ -630,7 +608,7 @@ export default function AdminPage() {
                                     <table className="w-full text-sm">
                                         <thead>
                                             <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                                {['#', 'Kiracı', 'Ev Sahibi', 'İlan', 'Tarih', 'Tutar', 'Durum'].map(h => (
+                                                {['Kiracı', 'Ev Sahibi', 'İlan', 'Tarih', 'Tutar', 'Durum'].map(h => (
                                                     <th key={h} className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider" style={{ color: '#475569' }}>{h}</th>
                                                 ))}
                                             </tr>
@@ -655,10 +633,6 @@ export default function AdminPage() {
                                                 const placeOwner = b.place?.owner || users.find(u => u.id === b.place?.ownerId);
                                                 return (
                                                     <tr key={b._id || b.id} className="border-b hover:bg-white/[0.02] transition-colors" style={{ borderColor: 'rgba(255,255,255,0.03)' }}>
-                                                        {/* # Booking ID */}
-                                                        <td className="px-4 py-4">
-                                                            <span className="font-mono text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(99,102,241,0.12)', color: '#818cf8' }}>#{b.shortId ?? '—'}</span>
-                                                        </td>
                                                         {/* Kiracı (tenant/guest) */}
                                                         <td className="px-4 py-4">
                                                             <div className="flex items-center gap-2">

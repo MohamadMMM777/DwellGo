@@ -133,8 +133,6 @@ export default function PlacesFormPage() {
   const [beds, setBeds]             = useState(1);
   const [bathrooms, setBathrooms]   = useState(1);
   const [extraInfo, setExtraInfo]   = useState('');
-  const [checkIn, setCheckIn]       = useState('14:00');
-  const [checkOut, setCheckOut]     = useState('11:00');
 
   // Step 5
   const [price, setPrice]                   = useState(500);
@@ -160,8 +158,6 @@ export default function PlacesFormPage() {
         setDescription(data.description || '');
         setPerks(data.perks || []);
         setExtraInfo(data.extraInfo || '');
-        setCheckIn(data.checkIn != null ? `${data.checkIn}:00` : '14:00');
-        setCheckOut(data.checkOut != null ? `${data.checkOut}:00` : '11:00');
         setPrice(data.price || 500);
         if (data.capacity) {
           setMaxGuests(data.capacity.maxGuests || 1);
@@ -214,7 +210,7 @@ export default function PlacesFormPage() {
     const address = [neighborhood, district, city].filter(Boolean).join(', ');
     const placeData = {
       title, propertyType, city, district, neighborhood, street, address,
-      addedPhotos, description, perks, extraInfo, checkIn, checkOut, price,
+      addedPhotos, description, perks, extraInfo, price,
       latitude: lat, longitude: lng,
       maxGuests, bedrooms, beds, bathrooms,
       cleaningFee, serviceFee, securityDeposit,
@@ -446,29 +442,6 @@ export default function PlacesFormPage() {
                     <Counter label="Yatak Odası"  value={bedrooms}   onChange={setBedrooms}   Icon={Bed}   min={1} />
                     <Counter label="Yatak Sayısı" value={beds}       onChange={setBeds}       Icon={Bed}   min={1} />
                     <Counter label="Banyo Sayısı" value={bathrooms}  onChange={setBathrooms}  Icon={Bath}  min={1} />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold mb-2 ml-1" style={{ color: 'var(--on-surface)' }}>
-                        Giriş Saati
-                      </label>
-                      <input
-                        type="time"
-                        value={checkIn}
-                        onChange={e => setCheckIn(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold mb-2 ml-1" style={{ color: 'var(--on-surface)' }}>
-                        Çıkış Saati
-                      </label>
-                      <input
-                        type="time"
-                        value={checkOut}
-                        onChange={e => setCheckOut(e.target.value)}
-                      />
-                    </div>
                   </div>
 
                   <div>

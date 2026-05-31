@@ -37,11 +37,6 @@ const mapPlaceData = (p) => {
     };
 };
 
-const getHour = (str) => {
-    if (str === null || str === undefined || str === '') return null;
-    const match = String(str).match(/^(\d+)/);
-    return match ? parseInt(match[1], 10) : null;
-};
 
 // ── getAllPlaces (public) ─────────────────────────────────────────────────────
 // Only returns PUBLISHED places owned by non-banned users.
@@ -146,7 +141,7 @@ const createPlace = async (req, res) => {
 
         const {
             title, propertyType, city, district, neighborhood, street, address,
-            addedPhotos, description, perks, extraInfo, checkIn, checkOut, price,
+            addedPhotos, description, perks, extraInfo, price,
             latitude, longitude, maxGuests, bedrooms, beds, bathrooms,
             cleaningFee, serviceFee, securityDeposit
         } = req.body;
@@ -193,8 +188,6 @@ const createPlace = async (req, res) => {
                 description: description || '',
                 status: 'PUBLISHED',
                 extraInfo: extraInfo || '',
-                checkIn: getHour(checkIn),
-                checkOut: getHour(checkOut),
                 location: {
                     create: {
                         city: city.trim(),
@@ -258,7 +251,7 @@ const updatePlace = async (req, res) => {
         const userDoc = req.user;
         const {
             id, title, propertyType, city, district, neighborhood, street, address,
-            addedPhotos, description, perks, extraInfo, checkIn, checkOut, price,
+            addedPhotos, description, perks, extraInfo, price,
             latitude, longitude, maxGuests, bedrooms, beds, bathrooms,
             cleaningFee, serviceFee, securityDeposit
         } = req.body;
@@ -294,8 +287,6 @@ const updatePlace = async (req, res) => {
                 propertyType,
                 description,
                 extraInfo,
-                checkIn: getHour(checkIn),
-                checkOut: getHour(checkOut),
                 location: {
                     upsert: {
                         create: { city, district, neighborhood, street, address, latitude: Number(latitude) || 0, longitude: Number(longitude) || 0 },

@@ -118,8 +118,6 @@ model Place {
   propertyType String      @default("apartment") @map("mulk_tipi")
   status       PlaceStatus @default(PUBLISHED) @map("durum")
   extraInfo    String?     @map("ek_bilgi")
-  checkIn      Int?        @map("giris_saati")
-  checkOut     Int?        @map("cikis_saati")
   createdAt    DateTime    @default(now()) @map("olusturulma_tarihi")
   updatedAt    DateTime    @updatedAt @map("guncellenme_tarihi")
 
