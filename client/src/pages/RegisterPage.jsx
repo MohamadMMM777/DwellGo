@@ -23,8 +23,9 @@ export default function RegisterPage() {
             setUser(loginRes.data);
             toast.success('Hesabınız oluşturuldu!');
             setRedirect(true);
-        } catch {
-            toast.error('Kayıt başarısız. Bu e-posta zaten kullanılıyor olabilir.');
+        } catch (err) {
+            const errorMsg = err.response?.data?.error || 'Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.';
+            toast.error(errorMsg);
         } finally {
             setLoading(false);
         }
