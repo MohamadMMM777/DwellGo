@@ -32,11 +32,6 @@ async function main() {
 
     // ── 2. Create Users (Hosts & Guests) ──────────────────────────────────────
     const passwordHash = hash('123'); // Simple password '123' for ease of testing
-    const adminPassword = hash('DwellGo_Admin_#2024!Complex');
-    const host1Password = hash('DwellGo_Host1_#2024!Complex');
-    const host2Password = hash('DwellGo_Host2_#2024!Complex');
-    const guest1Password = hash('DwellGo_Guest1_#2024!Complex');
-    const guest2Password = hash('DwellGo_Guest2_#2024!Complex');
 
     // Admin
     const admin = await prisma.user.create({
@@ -44,7 +39,7 @@ async function main() {
             id: 'U_ADMIN',
             shortId: 1,
             email: 'admin@dwellgo.com',
-            password: adminPassword,
+            password: passwordHash,
             role: 'ADMIN',
             isHost: false,
             isVerified: true,
@@ -100,7 +95,7 @@ async function main() {
             id: 'U_HOST1',
             shortId: 5,
             email: 'host1@dwellgo.com',
-            password: host1Password,
+            password: passwordHash,
             role: 'USER',
             isHost: true,
             hostSince: new Date(),
@@ -114,7 +109,7 @@ async function main() {
             id: 'U_HOST2',
             shortId: 6,
             email: 'host2@dwellgo.com',
-            password: host2Password,
+            password: passwordHash,
             role: 'USER',
             isHost: true,
             hostSince: new Date(),
@@ -129,7 +124,7 @@ async function main() {
             id: 'U_GUEST1',
             shortId: 7,
             email: 'guest1@dwellgo.com',
-            password: guest1Password,
+            password: passwordHash,
             role: 'USER',
             isHost: false,
             isVerified: true,
@@ -142,7 +137,7 @@ async function main() {
             id: 'U_GUEST2',
             shortId: 8,
             email: 'guest2@dwellgo.com',
-            password: guest2Password,
+            password: passwordHash,
             role: 'USER',
             isHost: false,
             isVerified: true,
